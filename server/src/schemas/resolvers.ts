@@ -1,6 +1,6 @@
 import User from "../models/User.js";
 import { AuthenticationError } from "apollo-server-express";
-import { signToken } from "../utils/auth";
+import { signToken } from "../services/auth.js";
 import { BookInput } from "../types/booktypes.js";
 import { GraphQLContext } from "../types/contexttypes.js";
 
@@ -31,10 +31,10 @@ const resolvers = {
   Mutation: {
     addUser: async (
       _parent: any,
-      { username, email, password }: AddUserArgs
+      { email, password }: AddUserArgs
     ) => {
-      const user = await User.create({ username, email, password });
-      const token = signToken(user);
+      const user = await User.create({email, password });
+      const token = signToken(user.email, user._id);
       return { token, user };
     },
 
@@ -50,7 +50,7 @@ const resolvers = {
         throw new AuthenticationError("Incorrect password!");
       }
 
-      const token = signToken(user);
+      const token = signToken(user.email, user._id);
       return { token, user };
     },
 
