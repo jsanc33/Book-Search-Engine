@@ -1,9 +1,8 @@
-import User, { IUser } from '../models/User.js';
-import { AuthenticationError } from 'apollo-server-express';
-import { signToken } from '../utils/auth';
-import { BookInput } from '../types/book';
-import { GraphQLContext } from '../types/context';
-
+import User, { IUser } from "../models/User.js";
+import { AuthenticationError } from "apollo-server-express";
+import { signToken } from "../utils/auth";
+import { BookInput } from "../types/book";
+import { GraphQLContext } from "../types/context";
 
 const resolvers = {
   Query: {
@@ -11,16 +10,22 @@ const resolvers = {
       if (context.user) {
         return User.findById(context.user._id);
       }
-      throw new AuthenticationError('You need to be logged in!');
+      throw new AuthenticationError("You need to be logged in!");
     },
-  
   },
   Mutation: {
-    createMatchup: async (_parent: any, args: any): Promise<IMatchup | null> => {
-      const matchup = await Matchup.create(args);
-      return matchup;
+    addUser: async (
+      _parent: any,
+      { username, email, password }: AddUserArgs
+    ) => {
+      const user = await User.create({ username, email, password });
+      const token = signToken(user);
+      return { token, user };
     },
-    createVote: async (_parent: any, { _id, techNum }: { _id: string, techNum: number}): Promise<IMatchup | null> => {
+    createVote: async (
+      _parent: any,
+      { _id, techNum }: { _id: string; techNum: number }
+    ): Promise<IMatchup | null> => {
       const vote = await Matchup.findOneAndUpdate(
         { _id },
         { $inc: { [`tech${techNum}_votes`]: 1 } },
