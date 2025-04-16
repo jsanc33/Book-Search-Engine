@@ -20,6 +20,11 @@ const typeDefs = gql`
     title: String
   }
 
+  type Auth {
+    token: ID!
+    user: User
+  }
+
   type Query {
     tech: [Tech]
     matchups(_id: String): [Matchup]
