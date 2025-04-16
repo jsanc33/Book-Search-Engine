@@ -1,10 +1,14 @@
-const typeDefs = `
-  type Tech {
-    _id: ID!
-    name: String!
+const { gql } = require('apollo-server-express');
+
+
+const typeDefs = gql`
+   type User {
+    _id: ID
+    username: String
+    email: String
+    password: String
+    savedBooks: [Book]!
   }
-  const typeDefs = `
-  _id: ID!
 
   type Matchup {
     _id: ID!
