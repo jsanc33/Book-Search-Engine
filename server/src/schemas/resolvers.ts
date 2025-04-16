@@ -1,6 +1,5 @@
 import User from "../models/User.js";
-import { AuthenticationError } from "apollo-server-express";
-import { signToken } from "../services/auth.js";
+import { signToken, AuthenticationError } from "../services/auth.js";
 import { BookInput } from "../types/booktypes.js";
 import { GraphQLContext } from "../types/contexttypes.js";
 
