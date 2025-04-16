@@ -22,7 +22,7 @@ const resolvers = {
       const token = signToken(user);
       return { token, user };
     },
-    
+
     login: async (_parent: any, { email, password }: LoginArgs) => {
       const user = await User.findOne({ email });
 
@@ -37,6 +37,22 @@ const resolvers = {
 
       const token = signToken(user);
       return { token, user };
+    },
+
+    addBook: async (_parent: any, args: BookInput, context: GraphQLContext) => {
+      if (context.user) {
+        return User.findByIdAndUpdate(
+          context.user._id,
+          {
+            $addToSet: { savedBooks: args },
+          },
+          {
+            new: true,
+            runValidators: true,
+          }
+        );
+      }
+      throw new AuthenticationError("You need to be logged in!");
     },
   },
 };
