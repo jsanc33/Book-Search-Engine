@@ -13,10 +13,7 @@ const resolvers = {
       }
       throw new AuthenticationError('You need to be logged in!');
     },
-    matchups: async (_parent: any, { _id }: { _id: string }): Promise<IMatchup[] | null> => {
-      const params = _id ? { _id } : {};
-      return Matchup.find(params);
-    },
+  
   },
   Mutation: {
     createMatchup: async (_parent: any, args: any): Promise<IMatchup | null> => {
