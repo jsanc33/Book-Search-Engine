@@ -22,16 +22,21 @@ const resolvers = {
       const token = signToken(user);
       return { token, user };
     },
-    createVote: async (
-      _parent: any,
-      { _id, techNum }: { _id: string; techNum: number }
-    ): Promise<IMatchup | null> => {
-      const vote = await Matchup.findOneAndUpdate(
-        { _id },
-        { $inc: { [`tech${techNum}_votes`]: 1 } },
-        { new: true }
-      );
-      return vote;
+    
+    login: async (_parent: any, { email, password }: LoginArgs) => {
+      const user = await User.findOne({ email });
+
+      if (!user) {
+        throw new AuthenticationError("No user with this email found!");
+      }
+
+      const correctPw = await user.isCorrectPassword(password);
+      if (!correctPw) {
+        throw new AuthenticationError("Incorrect password!");
+      }
+
+      const token = signToken(user);
+      return { token, user };
     },
   },
 };
