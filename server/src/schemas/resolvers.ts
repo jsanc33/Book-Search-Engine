@@ -1,8 +1,23 @@
-import User, { IUser } from "../models/User.js";
+import User from "../models/User.js";
 import { AuthenticationError } from "apollo-server-express";
 import { signToken } from "../utils/auth";
-import { BookInput } from "../types/book";
-import { GraphQLContext } from "../types/context";
+import { BookInput } from "../types/booktypes.js";
+import { GraphQLContext } from "../types/contexttypes.js";
+
+interface AddUserArgs {
+  username: string;
+  email: string;
+  password: string;
+}
+
+interface LoginArgs {
+  email: string;
+  password: string;
+}
+
+interface RemoveBookArgs {
+  bookId: string;
+}
 
 const resolvers = {
   Query: {
