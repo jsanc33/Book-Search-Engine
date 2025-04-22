@@ -38,12 +38,13 @@ const startApolloServer = async () => {
   // Serve static assets if in production
   if (process.env.NODE_ENV === 'production') {
     // Serve client build files
-    app.use(express.static(path.join(__dirname, '../client/dist')));
-
-    // Fallback to index.html for React Router (SPA behavior)
+    const clientDistPath = path.resolve(__dirname, '../../client/dist');
+    app.use(express.static(clientDistPath));
+    
     app.get('*', (_req, res) => {
-      res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+      res.sendFile(path.join(clientDistPath, 'index.html'));
     });
+    
   }
 
   // Handle MongoDB connection errors
